@@ -1,0 +1,486 @@
+
+<!doctype html>
+<html lang="hi">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>दीपावली की शुभकामनाएँ!</title><!-- Google Fonts for festive look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&amp;family=Poppins:wght@400;600&amp;display=swap" rel="stylesheet"><!-- Font Awesome for WhatsApp Icon -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+        body {
+            margin: 0;
+            /* Festive Font for body */
+            font-family: 'Poppins', sans-serif;
+            /* Dharmik/Festive Body Background - Warm Gradient */
+            background: linear-gradient(to bottom right, #ff9933, #fceabb, #ff9933);
+            color: #4b0082; /* Dark purple text color */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; /* Prevent scroll due to fireworks */
+            position: relative;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.95); /* Slightly less transparent white container */
+            padding: 30px;
+            border-radius: 15px; /* Rounded corners */
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25); /* Slightly stronger shadow */
+            max-width: 90%;
+            width: 500px; /* Max width for the content area */
+            z-index: 2; /* Ensure content is above canvas */
+            position: relative;
+        }
+
+        h1, h2 {
+            /* Festive Font for headings */
+            font-family: 'Playfair Display', serif;
+            color: #ff4500; /* OrangeRed for headings - festive */
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3); /* Slightly stronger shadow */
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px; /* Slightly more rounded corners */
+            margin-bottom: 20px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4); /* More pronounced shadow for image */
+            border: 2px solid #ffd700; /* Added a gold border to image */
+        }
+
+        input[type="text"] {
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: calc(100% - 30px); /* Adjust width considering padding */
+            box-sizing: border-box;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif; /* Use Poppins for input */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #ff9933; /* Festive border on focus */
+            box-shadow: 0 0 8px rgba(255, 153, 51, 0.5); /* Glow effect on focus */
+            outline: none;
+        }
+
+
+        .whatsapp-button {
+            background-color: #25D366; /* WhatsApp Green */
+            color: white;
+            border: none;
+            padding: 12px 25px; /* Slightly more padding */
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600; /* Slightly bolder text */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto; /* Center the button */
+            transition: background-color 0.3s ease, transform 0.1s ease, box-shadow 0.3s ease;
+            text-decoration: none; /* Remove underline from links if used on <a> */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        .whatsapp-button i {
+            margin-right: 10px;
+            font-size: 1.4em; /* Slightly larger icon */
+        }
+
+        .whatsapp-button:hover {
+            background-color: #1EBE55;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Stronger shadow on hover */
+        }
+
+         .whatsapp-button:active {
+            transform: scale(0.98); /* Click effect */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Flatter shadow on click */
+         }
+
+        #initial-section, #greeting-section {
+            display: none; /* Hidden by default, JS will show one */
+        }
+
+        #greeting-section {
+             /* Make greeting section full screen for firework effect */
+             position: fixed; /* or absolute */
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             display: flex; /* Use flexbox for centering content */
+             flex-direction: column;
+             justify-content: center;
+             align-items: center;
+             padding: 0; /* Remove padding as content is centered */
+             background-color: #0d0400; /* Even darker background for fireworks */
+             color: #fff; /* White text on dark background */
+             overflow: hidden; /* Prevent scroll inside greeting */
+        }
+
+        #fireworksCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Canvas below content */
+        }
+
+        #greeting-section .container {
+             /* Dharmik/Festive Container on dark background */
+             background-color: rgba(75, 0, 130, 0.5); /* Semi-transparent deep purple, slightly less opaque */
+             color: #fff; /* White text */
+             box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); /* Stronger Gold glow shadow */
+             border: 3px solid #ffd700; /* Thicker Gold border */
+             z-index: 2; /* Content above canvas */
+             padding: 40px; /* More padding */
+             border-radius: 15px;
+             max-width: 90%;
+             width: 500px;
+        }
+
+        #greeting-section h2 {
+            color: #ffd700; /* Gold for greeting */
+            font-size: 2.2em; /* Slightly larger heading */
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.9); /* Stronger shadow for visibility */
+            margin-bottom: 30px;
+        }
+
+        #shareAgain {
+            margin-top: 40px;
+            padding-top: 25px; /* More padding above border */
+            border-top: 1px dashed rgba(255,255,255,0.4); /* Slightly more visible border */
+        }
+
+         #shareAgain p {
+             margin-bottom: 15px;
+             font-size: 1.1em;
+             color: rgba(255,255,255,0.95); /* Slightly brighter */
+         }
+
+         #shareAgain input[type="text"] {
+             background-color: rgba(255,255,255,0.98); /* Almost opaque white */
+             color: #333;
+             border-color: #ccc;
+         }
+         #shareAgain input[type="text"]:focus {
+             border-color: #ff9933;
+         }
+
+
+    </style>
+ </head>
+ <body>
+  <!-- Initial Section: Enter Name -->
+  <div id="initial-section" class="container">
+   <img src="laxmi.gif" alt="Laxmi Maa" id="laxmi-image">
+   <h1>दीपावली की शुभकामनाएँ भेजें</h1>
+   <p>अपना नाम लिखें और लिंक बनाकर अपने दोस्तों और परिवार को भेजें:</p><input type="text" id="nameInputInitial" placeholder="आपका नाम"> <button id="whatsappShareBtnInitial" class="whatsapp-button"> <i class="fab fa-whatsapp"></i> WhatsApp पर भेजें </button>
+  </div><!-- Greeting Section: Display Greeting and Fireworks -->
+  <div id="greeting-section">
+   <canvas id="fireworksCanvas"></canvas>
+   <div class="container">
+    <!-- Content container within the greeting section -->
+    <h2 id="greetingText">Happy Diwali!</h2><!-- Re-add name input and share button for the recipient -->
+    <div id="shareAgain">
+     <p>आप भी अपनी शुभकामनाएं भेजें:</p><input type="text" id="nameInputRecipient" placeholder="आपका नाम"> <button id="whatsappShareBtnRecipient" class="whatsapp-button"> <i class="fab fa-whatsapp"></i> WhatsApp पर भेजें </button>
+    </div>
+   </div>
+  </div>
+  <script>
+        // --- DOM Elements ---
+        const initialSection = document.getElementById('initial-section');
+        const greetingSection = document.getElementById('greeting-section');
+        const nameInputInitial = document.getElementById('nameInputInitial');
+        const whatsappShareBtnInitial = document.getElementById('whatsappShareBtnInitial');
+        const nameInputRecipient = document.getElementById('nameInputRecipient');
+        const whatsappShareBtnRecipient = document.getElementById('whatsappShareBtnRecipient');
+        const greetingText = document.getElementById('greetingText');
+
+        // --- URL Handling ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const senderName = urlParams.get('name');
+
+        // --- Firecracker Animation ---
+        const canvas = document.getElementById('fireworksCanvas');
+        const ctx = canvas.getContext('2d');
+        let fireworks = [];
+        let particles = [];
+
+        // Resize canvas to full screen
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas(); // Initial resize
+
+        // Particle Class
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+                this.velocity = {
+                    x: (Math.random() - 0.5) * 15, // Increased spread and speed for more vibrant explosions
+                    y: (Math.random() - 0.5) * 15  // Increased speed
+                };
+                this.alpha = 1;
+                this.friction = 0.91; // Increased friction for faster slow down
+                this.gravity = 0.8;   // Increased gravity
+                this.life = 80; // Slightly longer life for particles
+            }
+
+            update() {
+                this.velocity.x *= this.friction;
+                this.velocity.y *= this.friction;
+                this.velocity.y += this.gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.012; // Slower fade for particles
+                this.life--;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha > 0 ? this.alpha : 0;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2, false);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        // Firework Class (the rocket ascending before explosion)
+        class Firework {
+            constructor(startX, startY, endX, endY) {
+                this.startX = startX;
+                this.startY = startY;
+                this.endX = endX;
+                this.endY = endY;
+                this.x = startX;
+                this.y = startY;
+                this.distanceToEnd = Math.sqrt((endX - startX)**2 + (endY - startY)**2);
+                this.distanceTraveled = 0;
+                this.coordinates = [];
+                this.coordinateCount = 5; // Slightly longer trail
+                while (this.coordinateCount--) {
+                    this.coordinates.push([this.x, this.y]);
+                }
+                this.angle = Math.atan2(endY - startY, endX - startX);
+                this.speed = 8; // Rocket speed increased further
+                this.acceleration = 1.06; // Accelerate more
+                this.brightness = Math.random() * 50 + 60; // Brighter trails
+                this.color = 'hsl(' + Math.random() * 360 + ', 100%, ' + this.brightness + '%)'; // Full saturation for vibrant color
+                this.isExploded = false;
+            }
+
+            update(index) {
+                this.coordinates.pop();
+                this.coordinates.unshift([this.x, this.y]);
+
+                this.speed *= this.acceleration;
+                const vx = Math.cos(this.angle) * this.speed;
+                const vy = Math.sin(this.angle) * this.speed;
+
+                // Calculate distance traveled
+                 this.distanceTraveled += Math.sqrt(vx*vx + vy*vy);
+
+
+                // Check if reached destination or passed it vertically
+                if (this.distanceTraveled >= this.distanceToEnd || this.y <= this.endY) {
+                    this.isExploded = true;
+                    fireworks.splice(index, 1);
+                    this.explode();
+                } else {
+                    this.x += vx;
+                    this.y += vy;
+                }
+            }
+
+            explode() {
+                // Significantly increased particles for ~3x+ density target
+                const particleCount = 800 + Math.random() * 400; // Increased significantly
+                for (let i = 0; i < particleCount; i++) {
+                    particles.push(new Particle(this.x, this.y, this.color));
+                }
+            }
+
+            draw() {
+                 ctx.beginPath();
+                 ctx.moveTo(this.coordinates[this.coordinates.length - 1][0], this.coordinates[this.coordinates.length - 1][1]);
+                 ctx.lineTo(this.x, this.y);
+                 ctx.strokeStyle = this.color;
+                 ctx.lineWidth = 2;
+                 ctx.stroke();
+
+                 // Draw the head of the rocket
+                 ctx.beginPath();
+                 ctx.arc(this.x, this.y, 3, 0, Math.PI * 2, false);
+                 ctx.fillStyle = this.color;
+                 ctx.fill();
+            }
+        }
+
+
+        // Animation Loop
+        let animationFrameId;
+        let lastFireworkTime = 0;
+        // Shorter interval for more frequent fireworks (approx 3x)
+        const fireworkInterval = 40; // Milliseconds between batches (Increased frequency)
+
+        function animateFireworks(currentTime) {
+            animationFrameId = requestAnimationFrame(animateFireworks);
+
+            // Slightly fade the canvas background for trails
+            ctx.globalCompositeOperation = 'destination-out';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'; // Slower Fade effect for longer trails/colors
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = 'lighter'; // Blend fireworks
+
+            // Update and draw fireworks (rockets)
+            for (let i = fireworks.length - 1; i >= 0; i--) {
+                fireworks[i].update(i);
+                if (!fireworks[i].isExploded) {
+                   fireworks[i].draw();
+                }
+            }
+
+            // Update and draw particles (explosions)
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // Add new fireworks more frequently and in batches
+             if (!lastFireworkTime || currentTime - lastFireworkTime > fireworkInterval + Math.random() * fireworkInterval) {
+                if (fireworks.length < 50) { // Increased cap number of active rockets
+                    const startX = canvas.width * Math.random();
+                    const startY = canvas.height; // Start from bottom
+                    const endX = canvas.width * Math.random();
+                    const endY = canvas.height * (0.1 + Math.random() * 0.6); // Explode higher up
+
+                     // Add multiple fireworks at once (increased density)
+                    const numToAdd = 8 + Math.random() * 8; // Add 8 to 16 new fireworks
+                    for(let i = 0; i < numToAdd; i++) {
+                         fireworks.push(new Firework(
+                             startX + (Math.random() - 0.5) * 150, // Slightly wider start x variation
+                             startY,
+                             endX + (Math.random() - 0.5) * 250, // Slightly wider end x variation
+                             endY + (Math.random() - 0.5) * 150 // Slightly wider end y variation
+                         ));
+                    }
+                }
+                lastFireworkTime = currentTime;
+            }
+        }
+
+
+        // --- Share Logic ---
+        function generateShareLink(name) {
+            const baseUrl = window.location.origin + window.location.pathname;
+            const encodedName = encodeURIComponent(name.trim());
+            return `${baseUrl}?name=${encodedName}`;
+        }
+
+        async function shareGreeting(name) {
+            const trimmedName = name.trim();
+            if (!trimmedName) {
+                alert('कृपया अपना नाम लिखें!');
+                return;
+            }
+
+            const shareLink = generateShareLink(trimmedName);
+            // Updated festive Hindi message with emojis
+            const shareMessage = `आपको और आपके परिवार को ${trimmedName} की तरफ से दीपावली की हार्दिक शुभकामनाएँ! 🪔✨ Apni shubhkamnayein yahan se bhejein: ${shareLink}`;
+
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: 'दीपावली की शुभकामनाएँ!',
+                        text: shareMessage,
+                        url: shareLink // Although text contains URL, explicitly passing URL might be better for some platforms
+                    });
+                    console.log('Share successful');
+                } catch (error) {
+                    console.error('Error sharing:', error);
+                    // Fallback if share failed or cancelled
+                     // Check if it's likely a user cancellation or actual error
+                    if (error.name !== 'AbortError') {
+                         fallbackShare(shareMessage);
+                    }
+                }
+            } else {
+                // Fallback for browsers that don't support navigator.share
+                fallbackShare(shareMessage);
+            }
+        }
+
+        function fallbackShare(message) {
+            // Simple fallback: Try to open WhatsApp Web/App directly
+            // This might not work in all environments but is a reasonable fallback
+            const whatsappUrl = `whatsapp://send?text=${encodeURIComponent(message)}`;
+             try {
+                 window.open(whatsappUrl, '_blank');
+             } catch (e) {
+                 console.error("Could not open whatsapp URL", e);
+                 // As a last resort, inform the user to copy/paste
+                 alert("Sharing failed. Please copy the following message and share manually:\n\n" + message);
+             }
+        }
+
+
+        // --- Event Listeners ---
+        whatsappShareBtnInitial.addEventListener('click', () => {
+            shareGreeting(nameInputInitial.value);
+        });
+
+        whatsappShareBtnRecipient.addEventListener('click', () => {
+             shareGreeting(nameInputRecipient.value); // Recipient sharing forward
+        });
+
+
+        // --- Initial Load Logic ---
+        window.onload = () => {
+            if (senderName) {
+                // Decode name and display greeting
+                const decodedName = decodeURIComponent(senderName);
+                // Update greeting text to include "from [Name]" clearly
+                greetingText.textContent = `Happy Diwali from ${decodedName}! ✨🪔`;
+
+                initialSection.style.display = 'none';
+                greetingSection.style.display = 'flex'; // Use flex for centering content within greeting-section
+
+                // Start fireworks animation
+                animateFireworks();
+
+            } else {
+                // Show initial input form
+                initialSection.style.display = 'block'; // Use block for standard flow
+                greetingSection.style.display = 'none';
+                // Hide the share again section initially (only show input)
+                 document.getElementById('shareAgain').style.display = 'none'; // Hide share again section on initial page
+            }
+        };
+
+        // If the page is loaded with a name parameter, ensure the recipient input is visible
+        // This is already handled by the window.onload logic showing greeting-section which contains #shareAgain.
+
+    </script>
+ </body>
+</html>
